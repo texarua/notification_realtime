@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,6 +16,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::group(['middleware' => 'auth', 'namespace' => 'App\Http\Controllers'], function () {
+    Route::get('/users', 'UsersController@index')->name('users');
+    Route::post('/users/{user}/follow', 'UsersController@follow')->name('follow');
+    Route::delete('/users/{user}/unfollow', 'UsersController@unfollow')->name('unfollow');
+    Route::get('/notifications', 'UsersController@notifications');
+    Route::resource('posts', 'PostsController');
+
 });
 
 Auth::routes();

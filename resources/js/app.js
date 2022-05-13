@@ -5,6 +5,7 @@
  */
 
 require('./bootstrap');
+require('jquery');
 
 window.Vue = require('vue').default;
 
@@ -29,4 +30,29 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 const app = new Vue({
     el: '#app',
+});
+
+window.Pusher = require('pusher-js');
+import Echo from "laravel-echo";
+
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: pusherKey,
+    cluster: 'eu',
+    encrypted: true
+});
+
+
+//...
+
+$(document).ready(function() {
+    if(userId) {
+        //...
+        window.Echo.private(`App.Models.User.2`)
+            .notification((notification) => {
+                alert(123123123)
+                console.log('123123123123', notification)
+                addNotifications([notification], '#notifications');
+            });
+    }
 });
